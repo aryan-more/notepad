@@ -1,21 +1,36 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:notepad/utils/theme.dart';
+import 'package:notepad/view/loading/mixin.dart';
 
-class LoadingView extends StatelessWidget {
+class LoadingView extends StatelessWidget with LoadingMixin {
   const LoadingView({Key? key}) : super(key: key);
 
   static const routeName = "/loading";
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        children: [
-          CircularProgressIndicator(),
-          Text("Loading"),
-        ],
+    load(context);
+    final theme = Theme.of(context).colorScheme.theme;
+
+    return Scaffold(
+      body: Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(
+              color: theme.actionColor,
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            const Text(
+              "Loading",
+              style: TextStyle(
+                fontSize: 20,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
