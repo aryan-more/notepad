@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:notepad/models/note.dart';
-import 'package:notepad/utils/theme.dart';
+import 'package:notes/models/note.dart';
+import 'package:notes/utils/app_color_scheme.dart';
 
 class NoteTile extends StatelessWidget {
   const NoteTile({
@@ -16,7 +16,7 @@ class NoteTile extends StatelessWidget {
   final bool? isSelected;
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context).colorScheme.theme;
+    final theme = Theme.of(context).colorScheme.appColorScheme;
     return Padding(
       padding: EdgeInsets.all(isSelected != null ? 1.5 : 0),
       child: InkWell(

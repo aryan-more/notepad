@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:notepad/models/note.dart';
-import 'package:notepad/provider/notes.dart';
-import 'package:notepad/utils/theme.dart';
+import 'package:notes/models/note.dart';
+import 'package:notes/provider/notes.dart';
+import 'package:notes/services/firestore.dart';
+import 'package:notes/utils/app_color_scheme.dart';
 import 'package:provider/provider.dart';
 
 Future<bool> deleteDialog({
   required BuildContext context,
   required List<Note> notesToDelete,
 }) async {
-  final theme = Theme.of(context).colorScheme.theme;
+  final theme = Theme.of(context).colorScheme.appColorScheme;
 
   assert(notesToDelete.isNotEmpty);
   return await showDialog<bool>(
@@ -55,7 +56,13 @@ Future<bool> deleteDialog({
                       Flexible(
                         child: ElevatedButton(
                           onPressed: () async {
-                            await Provider.of<Notes>(context, listen: false).deletes(context: context, notesToDelete: notesToDelete);
+                            final fireStore = Provider.of<FireBaseFirestore?>(context, listen: false);
+                            if (fireStore != null) {
+                              fireStore.deletes(notesToDelete: notesToDelete);
+                            } else {
+                              await Provider.of<Notes>(context, listen: false).deletes(context: context, notesToDelete: notesToDelete);
+                            }
+
                             // ignore: use_build_context_synchronously
                             Navigator.of(context).pop(true);
                           },

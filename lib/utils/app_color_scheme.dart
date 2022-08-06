@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-extension CustomTheme on ColorScheme {
-  AppTheme get theme => brightness == Brightness.light ? LightAppTheme() : DarkAppTheme();
+extension CustomColorScheme on ColorScheme {
+  AppColorScheme get appColorScheme => brightness == Brightness.light ? LightColorScheme() : DarkAppColorScheme();
 }
 
-abstract class AppTheme {
+abstract class AppColorScheme {
   Color primaryColor = const Color(0x0000000f);
   Color secondaryColor = const Color(0x0000000f);
   Color actionColor = const Color(0x0000000f);
@@ -12,7 +12,7 @@ abstract class AppTheme {
   bool dark = false;
 }
 
-class LightAppTheme implements AppTheme {
+class LightColorScheme implements AppColorScheme {
   @override
   Color primaryColor = Colors.white;
 
@@ -29,7 +29,7 @@ class LightAppTheme implements AppTheme {
   bool dark = false;
 }
 
-class DarkAppTheme implements AppTheme {
+class DarkAppColorScheme implements AppColorScheme {
   @override
   Color primaryColor = Colors.black;
 
@@ -45,14 +45,28 @@ class DarkAppTheme implements AppTheme {
   bool dark = true;
 }
 
-ThemeData getTheme(AppTheme theme) {
+ThemeData getTheme(AppColorScheme theme) {
   ThemeData base;
-  if (theme is LightAppTheme) {
+  if (theme is LightColorScheme) {
     base = ThemeData.light();
   } else {
     base = ThemeData.dark();
   }
   return base.copyWith(
+    inputDecorationTheme: InputDecorationTheme(
+      labelStyle: TextStyle(
+        color: theme.actionColor,
+      ),
+      alignLabelWithHint: true,
+      border: const OutlineInputBorder(),
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(
+          color: theme.actionColor,
+          width: 2,
+        ),
+      ),
+      suffixIconColor: theme.actionColor,
+    ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: theme.actionColor,
     ),
@@ -60,6 +74,19 @@ ThemeData getTheme(AppTheme theme) {
       cursorColor: theme.actionColor,
       selectionHandleColor: theme.actionColor,
       selectionColor: (theme.actionColor.withOpacity(0.6)),
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: ButtonStyle(
+        foregroundColor: MaterialStateProperty.all(theme.actionColor),
+        overlayColor: MaterialStateProperty.all(theme.secondaryColor.withOpacity(0.80)),
+        textStyle: MaterialStateProperty.all(
+          TextStyle(
+            color: theme.actionColor,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(

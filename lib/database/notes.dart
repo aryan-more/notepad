@@ -2,8 +2,8 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
-import 'package:notepad/models/note.dart';
-import 'package:notepad/provider/notes.dart';
+import 'package:notes/models/note.dart';
+import 'package:notes/provider/notes.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
@@ -17,9 +17,9 @@ class NoteDataBase {
     sqfliteFfiInit();
     var path = (await getApplicationDocumentsDirectory()).path;
     if ((Platform.isWindows || Platform.isMacOS || Platform.isLinux)) {
-      database = await databaseFactoryFfi.openDatabase("$path/notepad/note.db");
+      database = await databaseFactoryFfi.openDatabase("$path/notes/note.db");
     } else {
-      database = await openDatabase("$path/notepad/note.db");
+      database = await openDatabase("$path/notes/note.db");
     }
 
     await database.execute("""
@@ -34,6 +34,16 @@ content TEXT NOT NULL)
     log(query.toString());
     // ignore: use_build_context_synchronously
     Provider.of<Notes>(context, listen: false).set(List<Note>.from(query.map((e) => Note.fromMap(e)).toList()));
+  }
+
+  static void deleteDataBase() async {
+    var path = (await getApplicationDocumentsDirectory()).path;
+
+    if ((Platform.isWindows || Platform.isMacOS || Platform.isLinux)) {
+      await databaseFactoryFfi.deleteDatabase("$path/notes/note.db");
+    } else {
+      await deleteDatabase("$path/notes/note.db");
+    }
   }
 
   static Future<void> update({required Note note}) async {

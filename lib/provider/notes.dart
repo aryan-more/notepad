@@ -1,14 +1,14 @@
 // ignore_for_file: body_might_complete_normally_nullable
 
 import 'package:flutter/material.dart';
-import 'package:notepad/database/notes.dart';
-import 'package:notepad/models/note.dart';
-import 'package:notepad/widget/dialogues/loading_dialog.dart';
+import 'package:notes/database/notes.dart';
+import 'package:notes/models/note.dart';
+import 'package:notes/widget/dialogues/loading_dialog.dart';
 
 class Notes extends ChangeNotifier {
-  List<Note>? _notes;
+  late List<Note> _notes;
 
-  List<Note>? get notes => _notes;
+  List<Note> get notes => _notes;
 
   void set(List<Note> notes) {
     _notes = notes;
@@ -19,7 +19,7 @@ class Notes extends ChangeNotifier {
     required BuildContext context,
     required Note note,
   }) async {
-    _notes?.add(note);
+    _notes.add(note);
     await saveChanges(
         context: context,
         fun: () async {
@@ -35,15 +35,16 @@ class Notes extends ChangeNotifier {
     required String content,
   }) async {
     if (note.title != title || note.content != content) {
-      note.applyUpdate(
-        title: title,
-        content: content,
-      );
       await saveChanges(
-          context: context,
-          fun: () async {
-            await NoteDataBase.update(note: note);
-          });
+        context: context,
+        fun: () async {
+          note.applyUpdate(
+            title: title,
+            content: content,
+          );
+          await NoteDataBase.update(note: note);
+        },
+      );
     }
     notifyListeners();
   }
@@ -57,7 +58,7 @@ class Notes extends ChangeNotifier {
         fun: () async {
           for (var note in notesToDelete) {
             await NoteDataBase.delete(note: note);
-            this.notes?.remove(note);
+            notes.remove(note);
           }
         });
     notifyListeners();

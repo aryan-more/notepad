@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:notepad/models/note.dart';
+import 'package:notes/models/note.dart';
 
 mixin NoteViewMixin {
   TextEditingController titleController = TextEditingController();

@@ -63,4 +63,11 @@ class Note {
     this.title = title;
     this.content = content;
   }
+
+  Note applyUpdateCopy({
+    required String title,
+    required String content,
+  }) {
+    return Note(createdDate: createdDate, lastUpdateDate: DateTime.now(), title: title, content: content);
+  }
 }

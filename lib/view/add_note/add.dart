@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:notepad/models/note.dart';
-import 'package:notepad/provider/notes.dart';
-import 'package:notepad/utils/theme.dart';
-import 'package:notepad/view/add_note/mixin.dart';
+import 'package:notes/models/note.dart';
+import 'package:notes/provider/notes.dart';
+import 'package:notes/services/firestore.dart';
+import 'package:notes/utils/app_color_scheme.dart';
+import 'package:notes/view/add_note/mixin.dart';
 import 'package:provider/provider.dart';
 
 class AddNoteView extends StatefulWidget {
@@ -16,8 +17,7 @@ class AddNoteView extends StatefulWidget {
 class _AddNoteViewState extends State<AddNoteView> with AddNoteMixin {
   @override
   Widget build(BuildContext context) {
-    final notes = context.watch<Notes>();
-    final theme = Theme.of(context).colorScheme.theme;
+    final theme = Theme.of(context).colorScheme.appColorScheme;
     return Scaffold(
       backgroundColor: theme.primaryColor,
       appBar: AppBar(
@@ -28,7 +28,13 @@ class _AddNoteViewState extends State<AddNoteView> with AddNoteMixin {
           if (title.text.isNotEmpty || content.text.isNotEmpty)
             IconButton(
               onPressed: () async {
-                await notes.add(context: context, note: Note.createNew(title: title.text, content: content.text));
+                final note = Note.createNew(title: title.text, content: content.text);
+                final fireStore = Provider.of<FireBaseFirestore?>(context, listen: false);
+                if (fireStore != null) {
+                  fireStore.add(note: note);
+                } else {
+                  await Provider.of<Notes>(context, listen: false).add(context: context, note: note);
+                }
                 // ignore: use_build_context_synchronously
                 Navigator.of(context).pop();
               },
@@ -48,6 +54,7 @@ class _AddNoteViewState extends State<AddNoteView> with AddNoteMixin {
                 onChanged: (_) => setState(() {}),
                 decoration: const InputDecoration(
                   border: InputBorder.none,
+                  focusedBorder: InputBorder.none,
                   hintText: "Title",
                 ),
               ),
@@ -60,6 +67,7 @@ class _AddNoteViewState extends State<AddNoteView> with AddNoteMixin {
                 keyboardType: TextInputType.multiline,
                 maxLines: 300,
                 decoration: const InputDecoration(
+                  focusedBorder: InputBorder.none,
                   border: InputBorder.none,
                 ),
               ),

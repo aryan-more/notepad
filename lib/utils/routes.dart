@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:notepad/models/note.dart';
-import 'package:notepad/view/add_note/add.dart';
-import 'package:notepad/view/home/home.dart';
-import 'package:notepad/view/loading/loading.dart';
-import 'package:notepad/view/not_found.dart';
-import 'package:notepad/view/view_note/view.dart';
+import 'package:notes/models/note.dart';
+import 'package:notes/view/account/account.dart';
+import 'package:notes/view/add_note/add.dart';
+import 'package:notes/view/loading/loading.dart';
+import 'package:notes/view/not_found.dart';
+import 'package:notes/view/view_note/view.dart';
+import 'package:notes/view/wrapper.dart';
 
 Route<dynamic> onGenerateRoute(RouteSettings routeSettings) {
   switch (routeSettings.name) {
@@ -20,9 +21,15 @@ Route<dynamic> onGenerateRoute(RouteSettings routeSettings) {
         settings: routeSettings,
       );
 
-    case HomeView.routeName:
+    case UserModeWrapper.routeName:
       return MaterialPageRoute(
-        builder: (context) => const HomeView(),
+        builder: (context) => const UserModeWrapper(),
+        settings: routeSettings,
+      );
+
+    case AccountView.routeName:
+      return MaterialPageRoute(
+        builder: (context) => const AccountView(),
         settings: routeSettings,
       );
     case NoteView.routeName:

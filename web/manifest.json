@@ -1,6 +1,6 @@
 {
-    "name": "notepad",
-    "short_name": "notepad",
+    "name": "notes",
+    "short_name": "notes",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

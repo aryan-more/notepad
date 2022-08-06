@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:notepad/utils/theme.dart';
-import 'package:notepad/view/loading/mixin.dart';
+import 'package:notes/utils/app_color_scheme.dart';
+import 'package:notes/view/loading/mixin.dart';
 
 class LoadingView extends StatelessWidget with LoadingMixin {
   const LoadingView({Key? key}) : super(key: key);
@@ -10,7 +10,7 @@ class LoadingView extends StatelessWidget with LoadingMixin {
   @override
   Widget build(BuildContext context) {
     load(context);
-    final theme = Theme.of(context).colorScheme.theme;
+    final theme = Theme.of(context).colorScheme.appColorScheme;
 
     return Scaffold(
       body: Center(

@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="io.aryan.notepad">
+    package="io.aryan.notes">
    <application
-        android:label="notepad"
+        android:label="notes"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

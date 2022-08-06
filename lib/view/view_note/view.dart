@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:notepad/models/note.dart';
-import 'package:notepad/provider/notes.dart';
-import 'package:notepad/utils/theme.dart';
-import 'package:notepad/view/view_note/mixin.dart';
-import 'package:notepad/widget/dialogues/delete.dart';
-import 'package:notepad/widget/dialogues/info.dart';
+import 'package:notes/models/note.dart';
+import 'package:notes/provider/notes.dart';
+import 'package:notes/services/firestore.dart';
+import 'package:notes/utils/app_color_scheme.dart';
+import 'package:notes/view/view_note/mixin.dart';
+import 'package:notes/widget/dialogues/delete.dart';
+import 'package:notes/widget/dialogues/info.dart';
 import 'package:provider/provider.dart';
 
 class NoteView extends StatefulWidget {
@@ -37,8 +38,7 @@ class _NoteViewState extends State<NoteView> with NoteViewMixin {
 
   @override
   Widget build(BuildContext context) {
-    final notes = context.watch<Notes>();
-    final theme = Theme.of(context).colorScheme.theme;
+    final theme = Theme.of(context).colorScheme.appColorScheme;
 
     return Scaffold(
       backgroundColor: theme.primaryColor,
@@ -46,16 +46,28 @@ class _NoteViewState extends State<NoteView> with NoteViewMixin {
         if (changed)
           IconButton(
             onPressed: () {
-              notes
-                  .update(
-                    context: context,
-                    note: widget.note,
-                    title: titleController.text,
-                    content: contentController.text,
-                  )
-                  .then(
-                    (value) => Navigator.of(context).pop(),
-                  );
+              final fireStore = Provider.of<FireBaseFirestore?>(context, listen: false);
+
+              if (fireStore != null) {
+                fireStore.update(
+                  context: context,
+                  note: widget.note,
+                  title: titleController.text,
+                  content: contentController.text,
+                );
+                Navigator.of(context).pop();
+              } else {
+                Provider.of<Notes>(context, listen: false)
+                    .update(
+                      context: context,
+                      note: widget.note,
+                      title: titleController.text,
+                      content: contentController.text,
+                    )
+                    .then(
+                      (value) => Navigator.of(context).pop(),
+                    );
+              }
             },
             icon: const Icon(
               Icons.save_outlined,
@@ -93,6 +105,7 @@ class _NoteViewState extends State<NoteView> with NoteViewMixin {
                 controller: titleController,
                 decoration: const InputDecoration(
                   border: InputBorder.none,
+                  focusedBorder: InputBorder.none,
                   hintText: "Title",
                 ),
                 style: TextStyle(
@@ -112,6 +125,7 @@ class _NoteViewState extends State<NoteView> with NoteViewMixin {
               child: TextField(
                 controller: contentController,
                 decoration: const InputDecoration(
+                  focusedBorder: InputBorder.none,
                   border: InputBorder.none,
                 ),
                 style: TextStyle(

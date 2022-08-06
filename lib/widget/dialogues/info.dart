@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:notepad/models/note.dart';
-import 'package:notepad/utils/date_format.dart';
-import 'package:notepad/utils/theme.dart';
+import 'package:notes/models/note.dart';
+import 'package:notes/utils/date_format.dart';
+import 'package:notes/utils/app_color_scheme.dart';
 
 void infoDialog({
   required BuildContext context,
   required Note note,
 }) {
-  final theme = Theme.of(context).colorScheme.theme;
+  final theme = Theme.of(context).colorScheme.appColorScheme;
 
   showDialog(
     context: context,

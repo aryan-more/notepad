@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:notepad/models/note.dart';
-import 'package:notepad/widget/dialogues/delete.dart';
+import 'package:notes/models/note.dart';
+import 'package:notes/widget/dialogues/delete.dart';
 
 mixin HomeViewMixin {
   Set<Note> selected = {};

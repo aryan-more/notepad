@@ -1,4 +1,4 @@
-package io.aryan.notepad
+package io.aryan.notes
 
 import io.flutter.embedding.android.FlutterActivity
 

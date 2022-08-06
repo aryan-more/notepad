@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:notepad/utils/theme.dart';
+import 'package:notes/utils/app_color_scheme.dart';
 
-Future<void> saveChanges({required BuildContext context, required FutureOr<Object?> Function() fun}) async {
-  final theme = Theme.of(context).colorScheme.theme;
+FutureOr<Object?> saveChanges({required BuildContext context, required FutureOr<Object?> Function() fun}) async {
+  final theme = Theme.of(context).colorScheme.appColorScheme;
 
   showDialog(
     context: context,
@@ -40,5 +40,6 @@ Future<void> saveChanges({required BuildContext context, required FutureOr<Objec
 
   var result = await fun();
   // ignore: use_build_context_synchronously
-  Navigator.of(context).pop(result);
+  Navigator.of(context).pop();
+  return result;
 }
